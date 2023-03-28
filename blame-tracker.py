@@ -427,7 +427,7 @@ def accuse_files(directory: str, files: list[str], verbose: int=0, warnings_disa
         # Run git blame
         try:
             # First attempt UTF-8 to retain unicode characters
-            line_porcelain_output = subprocess.run(['git', 'blame', '--line-porcelain', file], capture_output=True, text=True, cwd=directory, encoding='utf-8').stdout
+            line_porcelain_output = subprocess.run(['git', 'blame', '--line-porcelain', file], capture_output=True, text=True, cwd=directory, encoding='latin1').stdout
             if verbose >= 3:
                 info("Valid UTF-8 file.")
         except UnicodeDecodeError:

@@ -16,6 +16,7 @@ License: GNU General Public License v3.0
 # Import libraries
 ##################################################
 
+from __future__ import annotations
 import subprocess # For running git commands
 import glob       # For finding files
 import argparse   # For reading command line arguments
@@ -383,7 +384,7 @@ def extract_accusations_from_line_porcelain_output(line_porcelain_output: str) -
         author = re.search('author (.*)', section).group(1)
         date_string = re.search('author-time (\d+)', section).group(1)
         date    = datetime.fromtimestamp(int(date_string))
-        content = section.split('\n')[-2].removeprefix('\t')
+        content = section.split('\n')[-2].lstrip()
 
         # Add the accusation to the list
         accusations.append((author.lower(), date, content))

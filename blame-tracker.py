@@ -218,7 +218,7 @@ def main():
 # Helper functions
 ##################################################
 
-def analyze_author(author: str, accusations: list[tuple[str, datetime, str]]) -> dict[str, int]:
+def analyze_author(author: str, accusations: list) -> dict:
     '''
     Analyzes a list of accusations and returns a dictionary of statistics.
 
@@ -248,7 +248,7 @@ def analyze_author(author: str, accusations: list[tuple[str, datetime, str]]) ->
         # If the author has no accusations, return 0 for all statistics
         return {'lines': 0, 'chars': 0, 'non-blank': 0, 'two-or-more-char-lines': 0, 'non-blank-lines': 0, 'avg-line-len': 0}
 
-def analyze_authors(accusations: list[tuple[str, datetime, str]]) -> dict[str, dict[str, int]]:
+def analyze_authors(accusations: list) -> dict:
     '''
     Analyzes a list of accusations and returns a dictionary of users to dictionaries of statistics.
 
@@ -315,7 +315,7 @@ def parse_date(date: str) -> datetime:
             # If the date cannot be parsed, throw an error
             error('date must be in ISO 8601 format or American date format `m/d/y`.')
 
-def get_files(directory = "./", include = ['**/*'], exclude = []) -> list[str]:
+def get_files(directory = "./", include = ['**/*'], exclude = []) -> list:
     '''
     Gets a list of file paths from a list of file patterns, excluding files matching other file patterns.
 
@@ -347,7 +347,7 @@ def get_files(directory = "./", include = ['**/*'], exclude = []) -> list[str]:
 
     return list(files)
 
-def extract_accusations_from_line_porcelain_output(line_porcelain_output: str) -> list[tuple[str, datetime, str]]:
+def extract_accusations_from_line_porcelain_output(line_porcelain_output: str) -> list:
     '''
     Extracts the author, date, and the line content commited from each line of the `git blame --line-porcelain` output using regex.
 
@@ -383,7 +383,7 @@ def extract_accusations_from_line_porcelain_output(line_porcelain_output: str) -
         author = re.search('author (.*)', section).group(1)
         date_string = re.search('author-time (\d+)', section).group(1)
         date    = datetime.fromtimestamp(int(date_string))
-        content = section.split('\n')[-2].removeprefix('\t')
+        content = section.split('\n')[-2]
 
         # Add the accusation to the list
         accusations.append((author.lower(), date, content))
@@ -391,7 +391,7 @@ def extract_accusations_from_line_porcelain_output(line_porcelain_output: str) -
     # Return the list of accusations
     return accusations
 
-def accuse_files(directory: str, files: list[str], verbose: int=0, warnings_disabled=False) -> dict[str, list[tuple[str, datetime, str]]]:
+def accuse_files(directory: str, files: list, verbose: int=0, warnings_disabled=False) -> dict:
     '''
     Accuses the author of commits of all files between two dates.
 
@@ -447,7 +447,7 @@ def accuse_files(directory: str, files: list[str], verbose: int=0, warnings_disa
     # Return the list of all accusations
     return all_accusations
 
-def info(*messages: list[str]):
+def info(*messages: list):
     '''
     Prints an info message to stdout.
 
@@ -458,7 +458,7 @@ def info(*messages: list[str]):
     '''
     print(f'{PROGRAM_NAME}: info:', *messages, file=stderr, flush=True)
 
-def warn(*messages: list[str]):
+def warn(*messages: list):
     '''
     Prints an info message to stdout.
 
@@ -469,7 +469,7 @@ def warn(*messages: list[str]):
     '''
     print(f'{PROGRAM_NAME}: warning:\x1b[33m', *messages, '\x1b[0m', file=stderr, flush=True)
 
-def error(*messages: list[str]):
+def error(*messages: list):
     '''
     Prints an error message to stderr.
 
